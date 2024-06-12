@@ -1,0 +1,20 @@
+/* Fonts */
+@font-face {
+    font-family: 'Raleway';
+    src: url('../../public/fonts/raleway/static/Raleway-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Playfair Display';
+    src: url('../../public/fonts/playfair_display/static/PlayfairDisplay-Regular.ttf') format('truetype');
+}
+
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../../public/fonts/playfair_display/Poppins-Regular.ttf') format('truetype');
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
