@@ -19,4 +19,4 @@ Route::post('/registerAdd', [RegisterController::class, 'register']);
 //login
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/loginApp', [LoginController::class, 'login']);
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth:sanctum');
