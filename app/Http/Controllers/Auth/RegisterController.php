@@ -28,6 +28,8 @@ class RegisterController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        $user->assignRole('user');
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         // Login pengguna setelah registrasi
