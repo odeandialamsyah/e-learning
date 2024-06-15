@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 class LoginController extends Controller
 {
     public function index(){
-        return view();
+        return view('');
     }
 
     public function login(Request $request){
