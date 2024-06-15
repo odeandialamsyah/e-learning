@@ -8,7 +8,11 @@ use App\Http\Controllers\Auth\RegisterController;
 
 Route::get('/', function () {
     return view('index');
-});
+})->name('home');
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware('auth', 'role:admin')->name('dashboard');
 
 
 //register
