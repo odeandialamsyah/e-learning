@@ -32,6 +32,8 @@ class LoginController extends Controller
         // Login pengguna setelah verifikasi
         auth()->login($user);
 
+        $redirectUrl = $user->hasRole('admin') ? route('dashboard') : route('home');
+
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
