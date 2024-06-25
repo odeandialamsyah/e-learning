@@ -27,6 +27,7 @@ class ModuleController extends Controller
 
     public function show(Course $course, Module $module)
     {
+        $module->load('quizzes');
         return view('modules.show', compact('course', 'module'));
     }
 

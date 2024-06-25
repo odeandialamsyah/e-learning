@@ -38,7 +38,7 @@ class CourseController extends Controller
     public function enroll(Course $course)
     {
         // Simulasikan pendaftaran pengguna ke kursus di sini
-        // Contoh: $course->enroll(auth()->user());
+        $course->enroll(auth()->user());
 
         // Redirect kembali ke halaman dashboard setelah berhasil enroll
         return redirect()->route('dashboard')->with('success', 'You have successfully enrolled in the course.');
@@ -65,6 +65,6 @@ class CourseController extends Controller
     {
         $course->delete();
 
-        return redirect()->route('courses.index');
+        return redirect()->route('admin.dashboard');
     }
 }
