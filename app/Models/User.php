@@ -34,6 +34,17 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class);
+    }
+
+    public function isAdmin()
+    {
+        // Implement your logic to check if the user is an admin.
+        return $this->role === 'admin';
+    }
+
     /**
      * Get the attributes that should be cast.
      *
