@@ -31,6 +31,23 @@ class QuizController extends Controller
         return redirect()->route('modules.show', $module->id);
     }
 
+    public function edit(Quiz $quiz)
+    {
+        return view('quizzes.edit', compact('quiz'));
+    }
+
+    public function update(Request $request, Quiz $quiz)
+    {
+        $quiz->update($request->all());
+        return redirect()->route('modules.show', $quiz->module_id)->with('success', 'Quiz updated successfully.');
+    }
+
+    public function destroy(Quiz $quiz)
+    {
+        $quiz->delete();
+        return redirect()->route('modules.show', $quiz->module_id)->with('success', 'Quiz deleted successfully.');
+    }
+
     public function show(Quiz $quiz)
     {
         return view('quizzes.show', compact('quiz'));
