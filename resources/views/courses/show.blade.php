@@ -13,6 +13,7 @@
                     <div class="bg-gray-100 rounded-lg shadow-md p-4">
                         <h4 class="text-lg font-semibold mb-2">{{ $module->title }}</h4>
                         <p class="text-gray-600">{{ $module->content }}</p>
+                        <a href="{{ route('modules.show', ['course' => $course->id, 'module' => $module->id]) }}" class="text-blue-500">View Modules</a>
                     </div>
                 @empty
                     <p class="text-gray-600">No modules found for this course.</p>
