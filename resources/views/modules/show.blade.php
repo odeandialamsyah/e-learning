@@ -6,12 +6,7 @@
 <div class="container mx-auto">
     <h1 class="text-2xl font-bold mb-4">{{ $module->title }}</h1>
     <div class="bg-white shadow rounded p-4">
-        <p>{{ $module->content }}</p>
-        @if ($module->file_path)
-            <div class="mt-4">
-                <a href="{{ Storage::url($module->file_path) }}" class="text-blue-500 hover:underline">Download File</a>
-            </div>
-        @endif
+        <p>{{!! $module->content !!}}</p>
     </div>
     <div class="mt-4">
         @if ($module->quizzes->isEmpty())
@@ -37,6 +32,7 @@
             @endforeach
         @endif
     </div>
+    <a href="javascript:history.go(-1)" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Back</a>
 </div>
 <div class="h-56"></div>
 @endsection
