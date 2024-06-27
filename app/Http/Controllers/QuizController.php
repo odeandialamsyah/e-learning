@@ -12,7 +12,7 @@ class QuizController extends Controller
 
     public function index(){
         $quizzes = Quiz::with('module.course')->get();
-    return view('quizzes.index', compact('quizzes'));
+        return view ('quizzes.index', compact('quizzes'));
     }
 
     public function create(Module $module)
@@ -96,7 +96,7 @@ class QuizController extends Controller
     {
         $quiz->load('module.course'); 
     
-        return view('quizzes.show', compact('quiz'));
+        return view('quizzes.show', compact( 'quiz'));
     }
 
     public function evaluate(Request $request, Quiz $quiz)

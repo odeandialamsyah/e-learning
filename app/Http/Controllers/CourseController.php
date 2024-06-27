@@ -38,28 +38,18 @@ class CourseController extends Controller
         return view('courses.show', compact('course'));
     }
 
-    public function enrollUser(Request $request, $courseId)
+    public function enrollUser(Course $course)
     {
-        $course = Course::findOrFail($courseId);
-        $userId = $request->input('user_id');
-
-        if (!$course->users()->where('user_id', $userId)->exists()) {
-            $course->users()->attach($userId);
-        }
-
-        return redirect()->route('dashboard')->with('success', 'User enrolled successfully.');
+        $user = auth()->user();
+        $user->courses()->attach($course->id);
+        return redirect()->route('dashboard')->with('success', 'Successfully enrolled in the course.');
     }
 
-    public function unenrollUser(Request $request, $courseId)
+    public function unenrollUser(Course $course)
     {
-        $course = Course::findOrFail($courseId);
-        $userId = $request->input('user_id');
-
-        if ($course->users()->where('user_id', $userId)->exists()) {
-            $course->users()->detach($userId);
-        }
-
-        return redirect()->route('dashboard')->with('success', 'User unenrolled successfully.');
+        $user = auth()->user();
+        $user->courses()->detach($course->id);
+        return redirect()->route('dashboard')->with('success', 'Successfully unenrolled from the course.');
     }
 
     public function edit(Course $course)
