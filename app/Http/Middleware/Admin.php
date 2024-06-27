@@ -17,6 +17,11 @@ class Admin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return $next($request);
+
+        if ($request->user() && $request->user()->isAdmin()) {
+            return $next($request);
+        }
+
+        abort(403, 'Unauthorized.');
     }
 }
