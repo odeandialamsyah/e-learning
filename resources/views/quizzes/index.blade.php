@@ -20,7 +20,7 @@
                     <td class="px-4 py-2 border">{{ $quiz->module->title }}</td>
                     <td class="px-4 py-2 border">{{ $quiz->module->course->title }}</td>
                     <td class="px-4 py-2 border text-center">
-                        <a href="{{ route('quizzes.show', ['module' => $quiz->module->id, 'quiz' => $quiz->id]) }}" class="bg-blue-500 text-white px-4 py-2 round">View</a>
+                        <a href="{{ route('quizzes.show', ['module' => $quiz->module->course->id, 'quiz' => $quiz->id]) }}" class="bg-blue-500 text-white px-4 py-2 round">View</a>
                         <a href="{{ route('quizzes.edit', $quiz->id) }}" class="bg-green-500 text-white px-4 py-2 rounded">Edit</a>
                         <form action="{{ route('quizzes.destroy', $quiz->id) }}" method="POST" style="display:inline;">
                             @csrf
