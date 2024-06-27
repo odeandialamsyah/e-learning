@@ -10,7 +10,7 @@
 <body class="bg-gray-100">
     <div class="container mx-auto py-8">
         <h1 class="text-3xl font-bold mb-4">Edit Module</h1>
-        <form action="{{ route('modules.update', $module->id) }}" method="POST">
+        <form action="{{ route('modules.update', ['course' => $course->id, 'module' => $module->id]) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="mb-4">
