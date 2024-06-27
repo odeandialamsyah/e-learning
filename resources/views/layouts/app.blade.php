@@ -18,12 +18,11 @@
                         <li><a href="{{ route('register') }}" class="text-white hover:text-blue-500">Register</a></li>
                     @else
                         @if(auth()->user()->isAdmin())
-                            <li><a href="{{ route('admin.dashboard') }}" class="text-gray-700 hover:text-blue-500">Admin Dashboard</a></li>
-                            <li><a href="{{ route('courses.index') }}" class="text-gray-700 hover:text-blue-500">Courses</a></li>
+                            <li><a href="{{ route('admin.dashboard') }}" class="text-white hover:text-blue-500">Admin Dashboard</a></li>
                         @else
-                            <li><a href="{{ route('dashboard') }}" class="text-gray-700 hover:text-blue-500">Dashboard</a></li>
+                            <li><a href="{{ route('dashboard') }}" class="text-white hover:text-blue-500">Dashboard</a></li>
                         @endif
-                        <li><a href="{{ route('logout') }}" class="text-gray-700 hover:text-red-500" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+                        <li><a href="{{ route('logout') }}" class="text-white hover:text-red-500" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
