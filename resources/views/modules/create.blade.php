@@ -10,7 +10,7 @@
 <body class="bg-gray-100">
     <div class="container mx-auto py-8">
         <h1 class="text-3xl font-bold mb-4">Create Module</h1>
-        <form action="{{ route('modules.store', $course->id) }}" method="POST">
+        <form action="{{ route('modules.store') }}" method="POST">
             @csrf
             <div class="mb-4">
                 <label class="block text-gray-700">Title</label>
@@ -19,6 +19,14 @@
             <div class="mb-4">
                 <label class="block text-gray-700">Content</label>
                 <textarea name="content" class="w-full border border-gray-300 rounded px-4 py-2" rows="4"></textarea>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Course</label>
+                <select name="course_id" class="w-full border border-gray-300 rounded px-4 py-2" required>
+                    @foreach($courses as $course)
+                        <option value="{{ $course->id }}">{{ $course->title }}</option>
+                    @endforeach
+                </select>
             </div>
             <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white rounded px-4 py-2">Create Module</button>
         </form>
