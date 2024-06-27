@@ -36,7 +36,12 @@ class User extends Authenticatable
 
     public function courses()
     {
-        return $this->belongsToMany(Course::class, 'course_user', 'user_id', 'course_id');
+        return $this->belongsToMany(Course::class, 'course_user', 'user_id', 'course_id')->withTimestamps();
+    }
+
+    public function quizResults()
+    {
+        return $this->hasMany(QuizResult::class);
     }
 
     public function isAdmin()

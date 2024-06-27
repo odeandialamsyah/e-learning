@@ -22,6 +22,11 @@ class Quiz extends Model
         return $this->belongsTo(Module::class);
     }
 
+    public function results()
+    {
+        return $this->hasMany(QuizResult::class);
+    }
+
     public function isAnswer($option)
     {
         return $this->options[$this->correct_answer] === $option;
