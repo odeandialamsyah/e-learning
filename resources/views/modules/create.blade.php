@@ -6,6 +6,7 @@
     <title>Create Module</title>
     <!-- Link Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
 </head>
 <body class="bg-gray-100">
     <div class="container mx-auto py-8">
@@ -18,7 +19,7 @@
             </div>
             <div class="mb-4">
                 <label class="block text-gray-700">Content</label>
-                <textarea name="content" class="w-full border border-gray-300 rounded px-4 py-2" rows="4"></textarea>
+                <textarea name="content" id="content" class="w-full border border-gray-300 rounded px-4 py-2" rows="4"></textarea>
             </div>
             <div class="mb-4">
                 <label class="block text-gray-700">Course</label>
@@ -31,5 +32,8 @@
             <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white rounded px-4 py-2">Create Module</button>
         </form>
     </div>
+    <script>
+        CKEDITOR.replace('content');
+    </script>
 </body>
 </html>
