@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Quiz;
 use App\Models\Module;
 use Illuminate\Http\Request;
+use App\Models\QuizResult;
 
 class QuizController extends Controller
 {
@@ -105,6 +106,12 @@ class QuizController extends Controller
         ]);
 
         $isCorrect = $request->selected_option == $quiz->correct_answer;
+
+        QuizResult::create([
+            'user_id' => auth()->id(),
+            'quiz_id' => $quiz->id,
+            'is_correct' => $isCorrect,
+        ]);
 
         return view('quizzes.evaluate', compact('quiz', 'isCorrect'));
     }

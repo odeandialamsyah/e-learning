@@ -13,20 +13,26 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($enrolledCourses as $course)
+            @foreach (auth()->user()->courses as $course)
                 <tr>
                     <td class="border px-4 py-2">{{ $course->title }}</td>
                     <td class="border px-4 py-2">
-                        @foreach ($course->modules as $module)
-                            {{ $module->title }}<br>
-                        @endforeach
+                        @php
+                            $completedModules = $course->modules->filter(function ($module) {
+                                return $module->quizzes->every(function ($quiz) {
+                                    return $quiz->results->where('user_id', auth()->id())->isNotEmpty();
+                                });
+                            });
+                        @endphp
+                        {{ $completedModules->count() }} / {{ $course->modules->count() }}
                     </td>
                     <td class="border px-4 py-2">
-                        @foreach ($course->modules as $module)
-                            @foreach ($module->quizzes as $quiz)
-                                {{ $quiz->question }}<br>
-                            @endforeach
-                        @endforeach
+                        @php
+                            $completedQuizzes = $course->modules->flatMap->quizzes->filter(function ($quiz) {
+                                return $quiz->results->where('user_id', auth()->id())->isNotEmpty();
+                            });
+                        @endphp
+                        {{ $completedQuizzes->count() }} / {{ $course->modules->flatMap->quizzes->count() }}
                     </td>
                 </tr>
             @endforeach
