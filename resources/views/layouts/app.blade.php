@@ -9,7 +9,7 @@
 </head>
 <body class="bg-gray-100">
     <header class=" shadow w-auto bg-black h-32">
-        <div class="container mx-auto py-4 px-6 flex justify-between items-center">
+        <div class="container h-full   justify-items-center text-center mx-auto pb-4 px-6 flex justify-between items-center">
             <h1 class="text-2xl text-white font-bold">E-Learning App</h1>
             <nav >
                 <ul class="flex space-x-4">
