@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Course;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
     public function index()
     {
-        $courses = Course::all();
+        $courses = Course::with('users')->get();
+        $user = Auth::user();
         return view('courses.index', compact('courses'));
     }
 
@@ -35,13 +38,28 @@ class CourseController extends Controller
         return view('courses.show', compact('course'));
     }
 
-    public function enroll(Course $course)
+    public function enrollUser(Request $request, $courseId)
     {
-        // Simulasikan pendaftaran pengguna ke kursus di sini
-        $course->enroll(auth()->user());
+        $course = Course::findOrFail($courseId);
+        $userId = $request->input('user_id');
 
-        // Redirect kembali ke halaman dashboard setelah berhasil enroll
-        return redirect()->route('dashboard')->with('success', 'You have successfully enrolled in the course.');
+        if (!$course->users()->where('user_id', $userId)->exists()) {
+            $course->users()->attach($userId);
+        }
+
+        return redirect()->route('dashboard')->with('success', 'User enrolled successfully.');
+    }
+
+    public function unenrollUser(Request $request, $courseId)
+    {
+        $course = Course::findOrFail($courseId);
+        $userId = $request->input('user_id');
+
+        if ($course->users()->where('user_id', $userId)->exists()) {
+            $course->users()->detach($userId);
+        }
+
+        return redirect()->route('dashboard')->with('success', 'User unenrolled successfully.');
     }
 
     public function edit(Course $course)
@@ -65,6 +83,6 @@ class CourseController extends Controller
     {
         $course->delete();
 
-        return redirect()->route('admin.dashboard');
+        return redirect()->route('courses.index');
     }
 }

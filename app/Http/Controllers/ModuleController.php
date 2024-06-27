@@ -10,25 +10,33 @@ class ModuleController extends Controller
 {
     public function create(Course $course)
     {
-        return view('modules.create', compact('course'));
+        $courses = Course::all();
+        return view('modules.create', compact('courses'));
     }
 
-    public function store(Request $request, Course $course)
+    public function store(Request $request)
     {
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
+            'course_id' => 'required|exists:courses,id',
         ]);
 
-        $course->modules()->create($request->all());
+        Module::create($request->all());
 
-        return redirect()->route('courses.show', $course->id);
+        return redirect()->route('modules.index')->with('success', 'Module created successfully.');
     }
 
     public function show(Course $course, Module $module)
     {
         $module->load('quizzes');
         return view('modules.show', compact('course', 'module'));
+    }
+
+    public function index()
+    {
+        $modules = Module::with('course')->get();
+        return view('modules.index', compact('modules'));
     }
 
     public function edit(Course $course, Module $module)
@@ -45,12 +53,12 @@ class ModuleController extends Controller
 
         $module->update($request->all());
 
-        return redirect()->route('courses.show', $course->id);
+        return redirect()->route('modules.index', ['course' => $course->id]);
     }
 
     public function destroy(Course $course, Module $module)
     {
         $module->delete();
-        return redirect()->route('courses.show', $course->id);
+        return redirect()->route('modules.index', $course->id);
     }
 }

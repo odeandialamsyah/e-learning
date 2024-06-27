@@ -4,15 +4,26 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Course;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
+
     public function index()
     {
-        $user = auth()->user();
-        $courses = $user->courses;
+        $user = Auth::user();
+        $courses = Course::all();
 
-        return view('dashboard', compact('courses'));
+        return view('dashboard', compact('user', 'courses'));
+    }
+
+    public function history()
+    {
+        $user = Auth::user();
+        $enrolledCourses = $user->courses;
+
+        return view('history', compact('user', 'enrolledCourses'));
     }
 
     public function admin()
