@@ -8,27 +8,48 @@ use Illuminate\Http\Request;
 
 class QuizController extends Controller
 {
+
+    public function index(){
+        $quizzes = Quiz::with('module.course')->get();
+    return view('quizzes.index', compact('quizzes'));
+    }
+
     public function create(Module $module)
     {
-        return view('quizzes.create', compact('module'));
+        $modules = Module::all();
+        return view('quizzes.create', compact('modules'));
     }
 
     public function store(Request $request, Module $module)
     {
         $request->validate([
-            'question' => 'required|string',
-            'options' => 'required|array',
-            'correct_answer' => 'required|string',
+            'question' => 'required|string|max:255',
+            'option1' => 'required|string|max:255',
+            'option2' => 'required|string|max:255',
+            'option3' => 'required|string|max:255',
+            'option4' => 'required|string|max:255',
+            'correct_option' => 'required|integer|between:0,3',
+            'module_id' => 'required|exists:modules,id',
         ]);
+
+        $module = Module::findOrFail($request->module_id);
+        $course = $module->course;
+
+        $options = [
+            $request->option1,
+            $request->option2,
+            $request->option3,
+            $request->option4,
+        ];
 
         Quiz::create([
-            'module_id' => $module->id,
             'question' => $request->question,
-            'options' => json_encode($request->options),
-            'correct_answer' => $request->correct_answer,
+            'options' => json_encode($options),
+            'correct_answer' => $request->correct_option,
+            'module_id' => $request->module_id,
         ]);
 
-        return redirect()->route('modules.show', $module->id);
+        return redirect()->route('admin.dashboard')->with('success', 'Quiz created successfully.');
     }
 
     public function edit(Quiz $quiz)
@@ -38,24 +59,53 @@ class QuizController extends Controller
 
     public function update(Request $request, Quiz $quiz)
     {
-        $quiz->update($request->all());
-        return redirect()->route('modules.show', $quiz->module_id)->with('success', 'Quiz updated successfully.');
+        $request->validate([
+            'question' => 'required|string|max:255',
+            'option1' => 'required|string|max:255',
+            'option2' => 'required|string|max:255',
+            'option3' => 'required|string|max:255',
+            'option4' => 'required|string|max:255',
+            'correct_option' => 'required|integer|between:0,3',
+        ]);
+
+        $options = [
+            $request->option1,
+            $request->option2,
+            $request->option3,
+            $request->option4,
+        ];
+
+        $quiz->update([
+            'question' => $request->question,
+            'options' => json_encode($options),
+            'correct_answer' => $request->correct_option,
+        ]);
+
+        return redirect()->route('quizzes.index')->with('success', 'Quiz updated successfully.');
+  
     }
 
     public function destroy(Quiz $quiz)
     {
         $quiz->delete();
-        return redirect()->route('modules.show', $quiz->module_id)->with('success', 'Quiz deleted successfully.');
+        return redirect()->route('quizzes.index')->with('success', 'Quiz deleted successfully.');
     }
 
-    public function show(Quiz $quiz)
+    public function show(Module $module, Quiz $quiz)
     {
+        $quiz->load('module.course'); 
+    
         return view('quizzes.show', compact('quiz'));
     }
 
     public function evaluate(Request $request, Quiz $quiz)
     {
-        $correct = $quiz->correct_answer == $request->answer;
-        return view('quizzes.result', compact('correct'));
+        $request->validate([
+            'selected_option' => 'required|integer|between:0,3',
+        ]);
+
+        $isCorrect = $request->selected_option == $quiz->correct_answer;
+
+        return view('quizzes.evaluate', compact('quiz', 'isCorrect'));
     }
 }

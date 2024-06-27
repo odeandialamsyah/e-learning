@@ -10,7 +10,7 @@ class Quiz extends Model
     use HasFactory;
 
     protected $fillable = [
-        'question', 'options', 'correct_answer',
+        'question', 'options', 'correct_answer', 'module_id',
     ];
 
     protected $casts = [
