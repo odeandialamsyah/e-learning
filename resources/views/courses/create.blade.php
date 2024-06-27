@@ -1,8 +1,8 @@
-@extends('layouts.app')
+@extends('admin.layouts.admin')
 
 @section('content')
     <div class="flex items-center justify-center h-screen">
-        <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+        <div class="bg-white ml-48 p-8 rounded-lg shadow-lg max-w-md w-full">
             <h2 class="text-2xl font-semibold mb-6 text-center">Create New Course</h2>
 
             <form method="POST" action="{{ route('courses.store') }}">
