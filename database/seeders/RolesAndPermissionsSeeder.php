@@ -16,19 +16,21 @@ class RolesAndPermissionsSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'name' => 'Admin User',
-            'email' => 'odeandialamsyah@gmail.com',
-            'password' => Hash::make('13210911'),
-            'admin' => true,
-        ]);
+         // Reset cached roles and permissions
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // Buat user biasa
-        User::create([
-            'name' => 'Sindi',
-            'email' => 'Sindi1232gmail.com',
-            'password' => Hash::make('password'),
-            'admin' => false,
-        ]);
+        // Create permissions
+        Permission::create(['name' => 'manage courses']);
+        Permission::create(['name' => 'manage modules']);
+        Permission::create(['name' => 'manage quizzes']);
+        Permission::create(['name' => 'view data']);
+
+        // Create admin role and assign permissions
+        $adminRole = Role::create(['name' => 'admin', 'guard_name' => 'web']);
+        $adminRole->givePermissionTo(['manage courses', 'manage modules', 'manage quizzes', 'view data']);
+
+        // Create user role and assign permissions
+        $userRole = Role::create(['name' => 'user', 'guard_name' => 'web']);
+        $userRole->givePermissionTo(['manage courses', 'manage modules', 'manage quizzes', 'view data']);
     }
 }

@@ -7,20 +7,13 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\UserController;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
-Route::get('/', [AuthController::class, 'showRegistrationForm'])->name('register');
-Route::post('/', [AuthController::class, 'register']);
+// Authentication routes
+Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-
-Route::middleware('admin')->group(function () {
-   
-});
-
-
 
 // Routes for authenticated users
 Route::middleware('auth')->group(function () {
@@ -34,21 +27,23 @@ Route::middleware('auth')->group(function () {
     
     Route::post('/quizzes/{quiz}/evaluate', [QuizController::class, 'evaluate'])->name('quizzes.evaluate');
 
-    // Routes accessible by all authenticated users
     Route::get('/courses/{course}', [CourseController::class, 'show'])->name('courses.show');
     Route::get('/courses/{course}/modules/{module}', [ModuleController::class, 'show'])->name('modules.show');
+});
+
+// Admin routes
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/dashboard', [DashboardController::class, 'admin'])->name('admin.dashboard');
 
     Route::resource('users', UserController::class);
 
-    Route::get('/admin/dashboard', [DashboardController::class,'admin'])->name('admin.dashboard');
-    
-    Route::get('/courses/create', [CourseController::class, 'create'])->name('courses.create');
+    //oke
+    Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
+    Route::get('/create/create', [CourseController::class, 'create'])->name('courses.create');
     Route::post('/courses', [CourseController::class, 'store'])->name('courses.store');
     Route::get('/courses/{course}/edit', [CourseController::class, 'edit'])->name('courses.edit');
     Route::put('/courses/{course}', [CourseController::class, 'update'])->name('courses.update');
     Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
-
-    Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
 
     Route::get('/modules', [ModuleController::class, 'index'])->name('modules.index');
     Route::get('/modules/create', [ModuleController::class, 'create'])->name('modules.create');
@@ -65,3 +60,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/quizzes/{quiz}', [QuizController::class, 'destroy'])->name('quizzes.destroy');
     Route::get('/modules/{module}/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
 });
+
