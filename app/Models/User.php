@@ -71,13 +71,6 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
-    public function completedQuizzes(Module $module)
-    {
-        return $module->quizzes->filter(function ($quiz) {
-            return $this->quizResults->where('quiz_id', $quiz->id)->isNotEmpty();
-        });
-    }
-
     /**
      * Get the attributes that should be cast.
      *
