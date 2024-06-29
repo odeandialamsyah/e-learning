@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Course;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Course;
+use App\Models\Module;
+use App\Models\Quiz;
 use App\Models\User;
 
 class DashboardController extends Controller
@@ -30,7 +32,11 @@ class DashboardController extends Controller
     {
         // Ambil semua kursus untuk ditampilkan di dashboard admin
         $courses = Course::all();
+        $totalUsers = User::count();
+        $totalCourses = Course::count();
+        $totalModules = Module::count();
+        $totalQuizzes = Quiz::count();
 
-        return view('admin.dashboard', compact('courses'));
+        return view('admin.dashboard', compact('courses', 'totalUsers', 'totalCourses', 'totalModules', 'totalQuizzes'));
     }
 }
