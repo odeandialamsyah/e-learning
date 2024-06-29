@@ -14,6 +14,11 @@
                         <h4 class="text-lg font-semibold mb-2">{{ $module->title }}</h4>
                         <p class="text-gray-600 hidden">{{ $module->content }}</p>
                         <a href="{{ route('modules.show', ['course' => $course->id, 'module' => $module->id]) }}" class="text-blue-500">View Modules</a>
+                        @if ($module->getCompletedAttribute(auth()->user()))
+                            <span class="text-green-500">Completed</span>
+                        @else
+                            <span class="text-red-500">Incompleted</span>
+                        @endif
                     </div>
                 @empty
                     <p class="text-gray-600">No modules found for this course.</p>
