@@ -35,31 +35,31 @@
     </div>
     <div class="lg:ml-[250px] lg:grid lg:grid-cols-4 gap-5 mt-[-40px] p-5">
         <div class="p-5 flex bg-white rounded-2xl mb-5 lg:mb-[-7px]">
-            <i class="bi bi-wallet text-white border p-4 rounded-xl flex items-center bg-blue-800 border-blue-800"></i>
+            <i class="bi bi-person-lines-fill text-white border p-4 rounded-xl flex items-center bg-blue-800 border-blue-800"></i>
             <div class="ml-3 mr-16">
-                <h1>Users</h1>
-                <h2>2</h2>
+                <a href="{{route('users.index')}}">Users</a>
+                <h2>{{$totalUsers}}</h2>
             </div>
         </div>
         <div class="p-5 flex bg-white rounded-2xl mb-5 lg:mb-[-7px]">
-            <i class="bi bi-person-lines-fill text-white border p-4 rounded-xl flex items-center bg-purple-500 border-purpbg-purple-500"></i>
+            <i class="fa-regular fa-newspaper text-white border p-4 rounded-xl flex items-center bg-purple-500 border-purpbg-purple-500"></i>
             <div class="ml-3 mr-16">
-                <h1>Course</h1>
-                <h2>2</h2>
+                <a href="{{route('courses.index')}}">Course</a>
+                <h2>{{$totalCourses}}</h2>
             </div>
         </div>
         <div class="p-5 flex bg-white rounded-2xl mb-5 lg:mb-[-7px]">
             <i class="bi bi-wallet text-white border p-4 rounded-xl flex items-center bg-red-800 border-dark-800"></i>
             <div class="ml-3 mr-7">
-                <h1>Moduls</h1>
-                <h2>5</h2>
+                <a href="{{route('modules.index')}}">Moduls</a>
+                <h2>{{$totalModules}}</h2>
             </div>
         </div>
         <div class="p-5 flex bg-white rounded-2xl mb-5 lg:mb-[-7px]">
             <i class="bi bi-phone text-white border p-4 rounded-xl flex items-center bg-blue-500 border-blue-500"></i>
             <div class="ml-3 mr-4">
-                <h1>Quis</h1>
-                <h2>19 Orang</h2>
+                <a href="{{route('modules.store')}}">Quis</a>
+                <h2>{{ $totalQuizzes }}</h2>
             </div>
         </div>
     </div>
