@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('question');
             $table->json('options');
             $table->string('correct_answer');
+            $table->enum('status', ['Incomplete', 'Complete'])->default('Incomplete');
             $table->timestamps();
         });
     }
