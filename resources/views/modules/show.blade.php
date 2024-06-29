@@ -10,7 +10,7 @@
     </div>
     <div class="mt-4 mb-4">
         @if ($module->quizzes->isEmpty())
-            <p></p>
+            <p>No quizzes available for this module.</p>
         @else
             <h2 class="text-xl font-semibold">Quizzes</h2>
             <form action="{{ route('quizzes.evaluate', $module->id) }}" method="POST">
@@ -26,6 +26,12 @@
                                 </label>
                             @endforeach
                         </div>
+                        @if ($errors->has('already_answered_' . $quiz->id))
+                            <div class="flex items-center mt-1 text-red-500">
+                                <i class="fas fa-exclamation-circle mr-1"></i>
+                                <span>{{ $errors->first('already_answered_' . $quiz->id) }}</span>
+                            </div>
+                        @endif
                     </div>
                 @endforeach
                 <button type="submit" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">Submit All Answers</button>
