@@ -44,10 +44,38 @@ class User extends Authenticatable
         return $this->hasMany(QuizResult::class);
     }
 
+    public function unenroll($courseId)
+    {
+        // Hapus riwayat pengguna terkait kursus
+        $this->courses()->detach($courseId);
+        
+        // Reset riwayat quiz results terkait course yang di-unenroll
+        $quizzesToDelete = QuizResult::whereIn('quiz_id', function ($query) use ($courseId) {
+            $query->select('id')
+                ->from('quizzes')
+                ->where('module_id', function ($query) use ($courseId) {
+                    $query->select('id')
+                        ->from('modules')
+                        ->where('course_id', $courseId);
+                });
+        })->where('user_id', $this->id)->get();
+
+        foreach ($quizzesToDelete as $result) {
+            $result->delete();
+        }
+    }
+
     public function isAdmin()
     {
         // Implement your logic to check if the user is an admin.
         return $this->role === 'admin';
+    }
+
+    public function completedQuizzes(Module $module)
+    {
+        return $module->quizzes->filter(function ($quiz) {
+            return $this->quizResults->where('quiz_id', $quiz->id)->isNotEmpty();
+        });
     }
 
     /**
