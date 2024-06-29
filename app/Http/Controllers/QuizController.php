@@ -20,35 +20,37 @@ class QuizController extends Controller
         $modules = Module::all();
         return view('quizzes.create', compact('modules'));
     }
-
+ 
     public function store(Request $request, Module $module)
     {
         $request->validate([
-            'question' => 'required|string|max:255',
-            'option1' => 'required|string|max:255',
-            'option2' => 'required|string|max:255',
-            'option3' => 'required|string|max:255',
-            'option4' => 'required|string|max:255',
-            'correct_option' => 'required|integer|between:0,3',
+            'quizzes.*.question' => 'required|string|max:255',
+            'quizzes.*.option1' => 'required|string|max:255',
+            'quizzes.*.option2' => 'required|string|max:255',
+            'quizzes.*.option3' => 'required|string|max:255',
+            'quizzes.*.option4' => 'required|string|max:255',
+            'quizzes.*.correct_option' => 'required|integer|between:0,3',
             'module_id' => 'required|exists:modules,id',
         ]);
 
         $module = Module::findOrFail($request->module_id);
         $course = $module->course;
 
-        $options = [
-            $request->option1,
-            $request->option2,
-            $request->option3,
-            $request->option4,
-        ];
+        foreach ($request->quizzes as $quizData) {
+            $options = [
+                $quizData['option1'],
+                $quizData['option2'],
+                $quizData['option3'],
+                $quizData['option4'],
+            ];
 
-        Quiz::create([
-            'question' => $request->question,
-            'options' => json_encode($options),
-            'correct_answer' => $request->correct_option,
-            'module_id' => $request->module_id,
-        ]);
+            Quiz::create([
+                'question' => $quizData['question'],
+                'options' => json_encode($options),
+                'correct_answer' => $quizData['correct_option'],
+                'module_id' => $request->module_id,
+            ]);
+        }
 
         return redirect()->route('admin.dashboard')->with('success', 'Quiz created successfully.');
     }
@@ -99,20 +101,28 @@ class QuizController extends Controller
         return view('quizzes.show', compact( 'quiz'));
     }
 
-    public function evaluate(Request $request, Quiz $quiz)
+    public function evaluate(Request $request, Quiz $quiz, Module $module)
     {
-        $request->validate([
-            'selected_option' => 'required|integer|between:0,3',
-        ]);
-
-        $isCorrect = $request->selected_option == $quiz->correct_answer;
-
-        QuizResult::create([
-            'user_id' => auth()->id(),
-            'quiz_id' => $quiz->id,
-            'is_correct' => $isCorrect,
-        ]);
-
-        return view('quizzes.evaluate', compact('quiz', 'isCorrect'));
+        $totalQuizzes = $module->quizzes->count();
+        $correctAnswers = 0;
+    
+        foreach ($module->quizzes as $quiz) {
+            $selectedOption = $request->input("selected_option.{$quiz->id}");
+            $isCorrect = $selectedOption == $quiz->correct_answer;
+            
+            QuizResult::create([
+                'user_id' => auth()->id(),
+                'quiz_id' => $quiz->id,
+                'is_correct' => $isCorrect,
+            ]);
+    
+            if ($isCorrect) {
+                $correctAnswers++;
+            }
+        }
+    
+        $score = ($correctAnswers / $totalQuizzes) * 100;
+    
+        return view('quizzes.evaluate', compact('module', 'score'));
     }
 }

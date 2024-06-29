@@ -6,6 +6,7 @@
     <title>@yield('title')</title>
     @vite('resources/css/app.css')
     @yield('styles')
+    <script src="https://cdn.ckeditor.com/ckeditor5/36.0.2/classic/ckeditor.js"></script>
 </head>
 <body class="bg-gray-100">
     <header class=" shadow w-auto bg-black h-32">

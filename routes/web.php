@@ -25,7 +25,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/courses/{course}/modules/{module}', [ModuleController::class, 'show'])->name('modules.show');
     
-    Route::post('/quizzes/{quiz}/evaluate', [QuizController::class, 'evaluate'])->name('quizzes.evaluate');
+    Route::post('modules/{module}/quizzes', [QuizController::class, 'evaluate'])->name('quizzes.evaluate');
 
     Route::get('/courses/{course}', [CourseController::class, 'show'])->name('courses.show');
     Route::get('/courses/{course}/modules/{module}', [ModuleController::class, 'show'])->name('modules.show');
@@ -36,6 +36,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'admin'])->name('admin.dashboard');
 
     Route::resource('users', UserController::class);
+    Route::resource('quizzes', QuizController::class);
 
     //oke
     Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');

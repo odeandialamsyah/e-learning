@@ -25,6 +25,7 @@
             <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white rounded px-4 py-2">Update Module</button>
         </form>
     </div>
+    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
     <script>
         CKEDITOR.replace('content');
     </script>
