@@ -31,4 +31,12 @@ class Quiz extends Model
     {
         return $this->options[$this->correct_answer] === $option;
     }
+
+    public function getCompletedAttribute($user)
+    {
+        if (!$user) {
+            return false;
+        }
+        return $user->quizResults()->where('quiz_id', $this->id)->exists();
+    }
 }

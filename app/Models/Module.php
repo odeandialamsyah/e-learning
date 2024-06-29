@@ -22,4 +22,14 @@ class Module extends Model
     {
         return $this->hasMany(Quiz::class);
     }
+
+    public function getCompletedAttribute($user)
+    {
+        if (!$user) {
+            return false; // or throw an exception
+        }
+        return $this->quizzes->every(function ($quiz) use ($user) {
+            return $user->quizResults()->where('quiz_id', $quiz->id)->exists();
+        });
+    }   
 }
