@@ -21,17 +21,33 @@
                         @foreach ($course->modules as $module)
                             <li class="mb-1">
                                 <span class="font-semibold">{{ $module->title }}</span>
+                                @if ($module->getCompletedAttribute($user))
+                                    <span class="text-green-500">Complete</span>
+                                @else
+                                    <span class="text-red-500">Incomplete</span>
+                                @endif
+                                @php
+                                    $totalQuizzes = $module->quizzes->count();
+                                    $correctAnswers = $user->quizResults->whereIn('quiz_id', $module->quizzes->pluck('id'))->where('is_correct', true)->count();
+                                    $score = $totalQuizzes > 0 ? ($correctAnswers / $totalQuizzes) * 100 : 0;
+                                @endphp
+                                <span class="text-blue-500">Score: {{ number_format($score, 2) }}%</span>
                                 <ul class="ml-4 list-disc">
                                     @foreach ($module->quizzes as $quiz)
                                         <li>
                                             <span class="font-semibold">{{ $quiz->question }}</span>
+                                            @if ($quiz->getCompletedAttribute($user))
+                                                <span class="text-green-500">Complete</span>
+                                            @else
+                                                <span class="text-red-500">Incomplete</span>
+                                            @endif
                                             @php
                                                 $result = $user->quizResults->where('quiz_id', $quiz->id)->first();
                                             @endphp
                                             @if ($result)
-                                                - <span class="text-green-500">Correct</span>
+                                                - <span class="{{ $result->is_correct ? 'text-green-500' : 'text-red-500' }}">{{    $result->is_correct ? 'Correct' : 'Incorrect' }}</span>
                                             @else
-                                                - <span class="text-red-500">Incorrect</span>
+                                                - <span class="text-gray-500">Not Answered</span>
                                             @endif
                                         </li>
                                     @endforeach
