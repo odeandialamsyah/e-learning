@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Course;
+use App\Models\QuizResult;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -49,6 +50,22 @@ class CourseController extends Controller
     {
         $user = auth()->user();
         $user->courses()->detach($course->id);
+
+        $quizzesToDelete = QuizResult::whereIn('quiz_id', function ($query) use ($course) {
+            $query->select('id')
+                ->from('quizzes')
+                ->where('module_id', function ($query) use ($course) {
+                    $query->select('id')
+                        ->from('modules')
+                        ->where('course_id', $course->id)
+                        ->limit(1); // Limit to one module_id
+                });
+        })->where('user_id', $user->id)->get();
+    
+        foreach ($quizzesToDelete as $result) {
+            $result->delete();
+        }
+
         return redirect()->route('dashboard')->with('success', 'Successfully unenrolled from the course.');
     }
 

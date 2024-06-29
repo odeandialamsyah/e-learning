@@ -103,21 +103,30 @@ class QuizController extends Controller
 
     public function evaluate(Request $request, Quiz $quiz, Module $module)
     {
+        $user = auth()->user();
         $totalQuizzes = $module->quizzes->count();
         $correctAnswers = 0;
-    
+
         foreach ($module->quizzes as $quiz) {
-            $selectedOption = $request->input("selected_option.{$quiz->id}");
-            $isCorrect = $selectedOption == $quiz->correct_answer;
-            
-            QuizResult::create([
-                'user_id' => auth()->id(),
-                'quiz_id' => $quiz->id,
-                'is_correct' => $isCorrect,
-            ]);
-    
-            if ($isCorrect) {
-                $correctAnswers++;
+            $existingResult = QuizResult::where('user_id', $user->id)
+            ->where('quiz_id', $quiz->id)
+            ->exists();
+
+            if (!$existingResult) {
+                $selectedOption = $request->input("selected_option.{$quiz->id}");
+                $isCorrect = $selectedOption == $quiz->correct_answer;
+
+                QuizResult::create([
+                    'user_id' => $user->id,
+                    'quiz_id' => $quiz->id,
+                    'is_correct' => $isCorrect,
+                ]);
+
+                if ($isCorrect) {
+                    $correctAnswers++;
+                }
+            } else {
+                $request->session()->flash('already_answered_' . $quiz->id, 'You have already answered this quiz.');
             }
         }
     
