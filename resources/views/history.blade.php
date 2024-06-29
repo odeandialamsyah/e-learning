@@ -13,6 +13,11 @@
                         @foreach ($course->modules as $module)
                             <li class="mb-1">
                                 <span class="font-semibold">{{ $module->title }}</span>
+                                @if ($module->getCompletedAttribute($user))
+                                    <span class="text-green-500">Complete</span>
+                                @else
+                                    <span class="text-red-500">Incomplete</span>
+                                @endif
                                 @php
                                     $totalQuizzes = $module->quizzes->count();
                                     $correctAnswers = $user->quizResults->whereIn('quiz_id', $module->quizzes->pluck('id'))->where('is_correct', true)->count();
@@ -23,6 +28,11 @@
                                     @foreach ($module->quizzes as $quiz)
                                         <li>
                                             <span class="font-semibold">{{ $quiz->question }}</span>
+                                            @if ($quiz->getCompletedAttribute($user))
+                                                <span class="text-green-500">Complete</span>
+                                            @else
+                                                <span class="text-red-500">Incomplete</span>
+                                            @endif
                                             @php
                                                 $result = $user->quizResults->where('quiz_id', $quiz->id)->first();
                                             @endphp
