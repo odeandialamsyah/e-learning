@@ -7,6 +7,11 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DaftarController;
+
+Route::get('/daftar', [DaftarController::class, 'index'])->name('daftar');
+
+Route::get('/', function(){return view('index', ['title' => 'Index']);});
 
 // Authentication routes
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
