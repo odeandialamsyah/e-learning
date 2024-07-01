@@ -11,7 +11,8 @@ use App\Http\Controllers\DaftarController;
 
 Route::get('/daftar', [DaftarController::class, 'index'])->name('daftar');
 
-Route::get('/', function(){return view('index', ['title' => 'Index']);});
+Route::get('/', function(){return view('welcome', ['title' => 'Welcome']);});
+Route::get('/home', function(){return view('welcome', ['title' => 'Welcome']);});
 
 // Authentication routes
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
