@@ -31,7 +31,7 @@
                 <a href=""><i class="fa-brands fa-instagram"></i></a>
             </div>
             <div>
-                <a href=""><i class="fa-brands fa-github"></i></a>
+                <a href="https://github.com/odeandialamsyah/e-learning"><i class="fa-brands fa-github"></i></a>
             </div>
             <div>
             </div>
