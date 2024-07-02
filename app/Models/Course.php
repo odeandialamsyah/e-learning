@@ -29,4 +29,25 @@ class Course extends Model
         // Misalnya, menggunakan relasi dengan tabel users
         return $this->users()->where('user_id', auth()->id())->exists();
     }
+
+    public function getAverageScoreForUser($user)
+    {
+        $totalScore = 0;
+        $completedModules = 0;
+
+        foreach ($this->modules as $module) {
+            $totalQuizzes = $module->quizzes->count();
+            if ($totalQuizzes == 0) {
+                continue; // Skip modules without quizzes
+            }
+
+            $correctAnswers = $user->quizResults->whereIn('quiz_id', $module->quizzes->pluck('id'))->where('is_correct', true)->count();
+            $moduleScore = ($correctAnswers / $totalQuizzes) * 100;
+
+            $totalScore += $moduleScore;
+            $completedModules++;
+        }
+
+        return $completedModules > 0 ? $totalScore / $completedModules : 0;
+    }
 }
