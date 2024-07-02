@@ -10,7 +10,7 @@ class QuizResult extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'quiz_id', 'is_correct', 'status_lulus',
+        'user_id', 'quiz_id', 'is_correct',
     ];
 
     public function user()
