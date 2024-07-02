@@ -51,16 +51,17 @@ class CourseController extends Controller
         $user = auth()->user();
         $user->courses()->detach($course->id);
 
-        $quizzesToDelete = QuizResult::whereIn('quiz_id', function ($query) use ($course) {
+        $quizzesToDelete = QuizResult::where('user_id', $user->id)
+        ->whereExists(function ($query) use ($course) {
             $query->select('id')
                 ->from('quizzes')
-                ->where('module_id', function ($query) use ($course) {
+                ->whereIn('module_id', function ($query) use ($course) {
                     $query->select('id')
                         ->from('modules')
-                        ->where('course_id', $course->id)
-                        ->limit(1); // Limit to one module_id
-                });
-        })->where('user_id', $user->id)->get();
+                        ->where('course_id', $course->id);
+                })
+                ->whereColumn('quizzes.id', 'quiz_results.quiz_id');
+        })->get();
     
         foreach ($quizzesToDelete as $result) {
             $result->delete();
