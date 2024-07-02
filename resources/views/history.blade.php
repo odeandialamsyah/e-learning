@@ -9,6 +9,15 @@
             @foreach ($user->courses as $course)
                 <li class="mb-2">
                     <h3 class="text-xl font-semibold">{{ $course->title }}</h3>
+                    @php
+                        $averageScore = $course->getAverageScoreForUser($user);
+                    @endphp
+                    @if ($averageScore >= 60) {{-- Assuming 60 is the passing grade --}}
+                        <span class="text-green-500">Lulus</span>
+                    @else
+                        <span class="text-red-500">Belum Lulus</span>
+                    @endif
+                    <span class="text-blue-500">Rata-rata Score: {{ number_format($averageScore, 2) }}%</span>
                     <ul class="ml-4 list-disc">
                         @foreach ($course->modules as $module)
                             <li class="mb-1">
@@ -21,9 +30,9 @@
                                 @php
                                     $totalQuizzes = $module->quizzes->count();
                                     $correctAnswers = $user->quizResults->whereIn('quiz_id', $module->quizzes->pluck('id'))->where('is_correct', true)->count();
-                                    $score = $totalQuizzes > 0 ? ($correctAnswers / $totalQuizzes) * 100 : 0;
+                                    $moduleScore = $totalQuizzes > 0 ? ($correctAnswers / $totalQuizzes) * 100 : 0;
                                 @endphp
-                                <span class="text-blue-500">Score: {{ number_format($score, 2) }}%</span>
+                                <span class="text-blue-500">Score: {{ number_format($moduleScore, 2) }}%</span>
                                 <ul class="ml-4 list-disc">
                                     @foreach ($module->quizzes as $quiz)
                                         <li>
@@ -51,6 +60,6 @@
             @endforeach
         </ul>
     </div>
-    <a href="{{route('dashboard')}}" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Back</a>
+    <a href="{{ route('dashboard') }}" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Back</a>
 </div>
 @endsection
